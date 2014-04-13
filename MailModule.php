@@ -18,7 +18,8 @@ class MailModule extends Module
 
     public function init()
     {
-        $this->moduleConfig = $this->app->config->get($this->type, $this->id, new MailConfig());
+        $this->app->configs->setDefaultConfig($this->id, new MailConfig());
+        $this->moduleConfig = $this->app->configs->getConfig($this->id);
 
         $this->app->events->join('mail', array($this, 'onMail'));
     }
@@ -42,6 +43,7 @@ class MailModule extends Module
             if ($to = $this->moduleConfig->to) {
                 $mail->subject = '[DEBUG for ' . print_r($mail->recipients, true) . '] '.$mail->subject;
                 $mail->recipients = $to;
+                $mail->recipientsCc = $mail->recipientsBcc = null;
             }
 
             $mail->send();
