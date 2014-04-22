@@ -2,7 +2,6 @@
 namespace Grout\Cyantree\MailModule;
 
 use Cyantree\Grout\App\Module;
-use Cyantree\Grout\DateTime\DateTime;
 use Cyantree\Grout\Event\Event;
 use Cyantree\Grout\Mail\Mail;
 use Cyantree\Grout\Tools\StringTools;
@@ -22,6 +21,8 @@ class MailModule extends Module
         $this->moduleConfig = $this->app->configs->getConfig($this->id);
 
         $this->app->events->join('mail', array($this, 'onMail'));
+
+        $this->addRoute('', 'Pages\MailPage');
     }
 
     private $_directory;
@@ -55,17 +56,20 @@ class MailModule extends Module
             }
 
             $t = time();
-            $text = 'DATE: ' . DateTime::$default->toLongDateTimeString($t, true) . chr(10) .
-                  'TO: ' . print_r($mail->recipients, true) . chr(10) .
-                  ($mail->recipientsCc ? 'CC: ' . print_r($mail->recipientsCc, true) . chr(10) : '') .
-                  ($mail->recipientsBcc ? 'BCC: ' . print_r($mail->recipientsBcc, true) . chr(10) : '') .
+            $text = 'DATE: ' . date('Y-m-h H:i:s', $t) . chr(10) .
+                  'TO: ' . json_encode($mail->recipients) . chr(10) .
+                  ($mail->recipientsCc ? 'CC: ' . json_encode($mail->recipientsCc) . chr(10) : '') .
+                  ($mail->recipientsBcc ? 'BCC: ' . json_encode($mail->recipientsBcc) . chr(10) : '') .
                   'SUBJECT: ' . $mail->subject . chr(10) .
-                  'FROM: ' . $mail->from . chr(10) . chr(10) .
+                  'FROM: ' . $mail->from . chr(10) .
+                  ($mail->returnPath ? 'RETURN-PATH: ' . $mail->returnPath . chr(10) : '') .
+                  chr(10) .
                   $mail->text;
 
             $file = $this->_directory . date('y-m-d H-i-s', $t) . ' - ' . StringTools::toUrlPart($mail->subject) . ' - ' . StringTools::random(4);
 
             file_put_contents($file . '.txt', $text);
+
             if ($mail->htmlText) {
                 file_put_contents($file . '.htm', $mail->htmlText);
             }
