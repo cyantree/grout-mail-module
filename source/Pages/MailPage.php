@@ -46,17 +46,37 @@ class MailPage extends Page
             $id = $this->task->request->get->asString('mail')->asInput(128)->value;
 
             if (preg_match('!^[a-zA-Z0-9_+ -]+$!', $id)) {
-                if (!is_file($directory . $id . '.txt')) {
+                if ($id != 'latest' && !is_file($directory . $id . '.txt')) {
                     $content = 'Mail does not exist.';
 
                 } else {
-                    $content = StringTools::escapeHtml(file_get_contents($directory . $id . '.txt'));
-                    $content = preg_replace('![a-zA-Z0-9]+://[^\s\(\)]+!', '<a href="\0" target="_blank">\0</a>', $content);
-                    $content = '<pre>' . $content . '</pre>';
+                    if ($id == 'latest') {
+                        $files = scandir($directory);
+                        $id = null;
 
-                    if (is_file($directory . $id . '.htm')) {
-                        $content .= '<iframe src="?mode=showhtml&amp;mail=' . rawurlencode($id) . '" width="900" height="600"></iframe>';
+                        foreach ($files as $file) {
+                            if ($file == '.' || $file == '..' || !preg_match('!^(.*)\.txt$!', $file, $fileData)) {
+                                continue;
+                            }
+
+                            $id = $fileData[1];
+                        }
                     }
+
+                    if (!$id) {
+                        $content = 'Mail does not exist';
+
+                    } else {
+                        $content = StringTools::escapeHtml(file_get_contents($directory . $id . '.txt'));
+                        $content = preg_replace('![a-zA-Z0-9]+://[^\s\(\)]+!', '<a href="\0" target="_blank">\0</a>', $content);
+                        $content = '<pre>' . $content . '</pre>';
+
+                        if (is_file($directory . $id . '.htm')) {
+                            $content .= '<iframe src="?mode=showhtml&amp;mail=' . rawurlencode($id) . '" width="900" height="600"></iframe>';
+                        }
+                    }
+
+
                 }
             } else {
                 $content = 'Please enter a valid id.';
@@ -94,6 +114,7 @@ class MailPage extends Page
 <body>
 <div>
 <a href="?">Show mails</a>
+<a href="?mode=show&amp;mail=latest">Show latest mail</a>
 <a href="?mode=clear">Clear mails</a>
 </div>
 <div><strong>

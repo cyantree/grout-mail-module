@@ -15,6 +15,8 @@ class MailModule extends Module
     /** @var MailConfig */
     public $moduleConfig;
 
+    private $_count = 0;
+
     public function init()
     {
         $this->app->configs->setDefaultConfig($this->id, new MailConfig());
@@ -55,6 +57,8 @@ class MailModule extends Module
                 $this->_directory = $this->app->parseUri($this->moduleConfig->directory);
             }
 
+            $this->_count++;
+
             $t = time();
             $text = 'DATE: ' . date('Y-m-h H:i:s', $t) . chr(10) .
                   'TO: ' . json_encode($mail->recipients) . chr(10) .
@@ -66,7 +70,7 @@ class MailModule extends Module
                   chr(10) .
                   $mail->text;
 
-            $file = $this->_directory . date('y-m-d H-i-s', $t) . ' - ' . StringTools::toUrlPart($mail->subject) . ' - ' . StringTools::random(4);
+            $file = trim($this->_directory . date('Y-m-d-H-i-s', $t) . ' - ' . str_pad($this->_count, 4, '0', STR_PAD_LEFT) . ' - ' . StringTools::toUrlPart($mail->subject));
 
             file_put_contents($file . '.txt', $text);
 
