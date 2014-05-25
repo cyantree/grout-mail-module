@@ -1,6 +1,6 @@
 {
     "name": "cyantree/grout-mail-module",
-    "version": "2.1",
+    "version": "2.2",
     "type": "grout-module",
     "description": "module which provides simple mail processing",
     "keywords": ["grout", "mail"],
@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "cyantree/grout": ">=1.0,<3.0"
+        "cyantree/grout": ">=1.0,<4.0"
     },
     "extra": {
         "grout-module-name": "Cyantree/MailModule"
