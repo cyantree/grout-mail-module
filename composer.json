@@ -1,21 +1,30 @@
 {
     "name": "cyantree/grout-mail-module",
-    "version": "2.2",
+    "version": "2.3",
     "type": "grout-module",
     "description": "module which provides simple mail processing",
-    "keywords": ["grout", "mail"],
+    "keywords": [
+        "grout",
+        "mail"
+    ],
     "homepage": "https://github.com/cyantree/grout-mail-module",
     "license": "LGPL-3.0",
     "authors": [
-        {"name": "Christoph Schreiber", "email": "mail@cyantree.com"}
+        {
+            "name": "Christoph Schreiber",
+            "email": "mail@cyantree.com"
+        }
     ],
     "autoload": {
         "psr-4": {
-            "Grout\\Cyantree\\MailModule\\": ["", "source/"]
+            "Grout\\Cyantree\\MailModule\\": [
+                "",
+                "source/"
+            ]
         }
     },
     "require": {
-        "cyantree/grout": ">=1.0,<4.0"
+        "cyantree/grout": ">=1.0,<5.0"
     },
     "extra": {
         "grout-module-name": "Cyantree/MailModule"
