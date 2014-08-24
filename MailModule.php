@@ -39,6 +39,10 @@ class MailModule extends Module
             $mail->from = $this->moduleConfig->from;
         }
 
+        if (!$mail->returnPath) {
+            $mail->returnPath = $this->moduleConfig->returnPath;
+        }
+
         $mode = $this->moduleConfig->mode;
 
         // Send mails
