@@ -15,7 +15,7 @@ class MailModule extends Module
     /** @var MailConfig */
     public $moduleConfig;
 
-    private $_count = 0;
+    private $count = 0;
 
     public function init()
     {
@@ -27,7 +27,7 @@ class MailModule extends Module
         $this->addRoute('', 'Pages\MailPage');
     }
 
-    private $_directory;
+    private $directory;
 
     /** @param Event $event */
     public function onMail($event)
@@ -48,7 +48,7 @@ class MailModule extends Module
         // Send mails
         if ($mode === self::MODE_SEND) {
             if ($to = $this->moduleConfig->to) {
-                $mail->subject = '[DEBUG for ' . print_r($mail->recipients, true) . '] '.$mail->subject;
+                $mail->subject = '[DEBUG for ' . print_r($mail->recipients, true) . '] ' . $mail->subject;
                 $mail->recipients = $to;
                 $mail->recipientsCc = $mail->recipientsBcc = null;
             }
@@ -57,11 +57,11 @@ class MailModule extends Module
 
             // Debug to directory
         } elseif ($mode === self::MODE_DIRECTORY) {
-            if (!$this->_directory) {
-                $this->_directory = $this->app->parseUri($this->moduleConfig->directory);
+            if (!$this->directory) {
+                $this->directory = $this->app->parseUri($this->moduleConfig->directory);
             }
 
-            $this->_count++;
+            $this->count++;
 
             $t = time();
             $text = 'DATE: ' . date('Y-m-h H:i:s', $t) . chr(10) .
@@ -74,7 +74,7 @@ class MailModule extends Module
                   chr(10) .
                   $mail->text;
 
-            $file = trim($this->_directory . date('Y-m-d-H-i-s', $t) . ' - ' . str_pad($this->_count, 4, '0', STR_PAD_LEFT) . ' - ' . StringTools::toUrlPart($mail->subject));
+            $file = trim($this->directory . date('Y-m-d-H-i-s', $t) . ' - ' . str_pad($this->count, 4, '0', STR_PAD_LEFT) . ' - ' . StringTools::toUrlPart($mail->subject));
 
             file_put_contents($file . '.txt', $text);
 
