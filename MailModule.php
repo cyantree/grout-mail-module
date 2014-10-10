@@ -74,7 +74,11 @@ class MailModule extends Module
                   chr(10) .
                   $mail->text;
 
-            $file = trim($this->directory . date('Y-m-d-H-i-s', $t) . ' - ' . str_pad($this->count, 4, '0', STR_PAD_LEFT) . ' - ' . StringTools::toUrlPart($mail->subject));
+            $file = trim(
+                $this->directory . date('Y-m-d-H-i-s', $t) . ' - '
+                . str_pad($this->count, 4, '0', STR_PAD_LEFT)
+                . ' - ' . StringTools::toUrlPart($mail->subject)
+            );
 
             file_put_contents($file . '.txt', $text);
 
