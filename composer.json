@@ -16,10 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Grout\\Cyantree\\MailModule\\": [
-                "",
-                "source/"
-            ]
+            "Grout\\Cyantree\\MailModule\\": ""
         }
     },
     "require": {
