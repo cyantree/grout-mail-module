@@ -68,8 +68,10 @@ class MailModule extends Module
                   'TO: ' . json_encode($mail->recipients) . chr(10) .
                   ($mail->recipientsCc ? 'CC: ' . json_encode($mail->recipientsCc) . chr(10) : '') .
                   ($mail->recipientsBcc ? 'BCC: ' . json_encode($mail->recipientsBcc) . chr(10) : '') .
+                  ($mail->replyTo ? 'REPLY-TO: ' . json_encode($mail->replyTo) . chr(10) : '') .
                   'SUBJECT: ' . $mail->subject . chr(10) .
-                  'FROM: ' . $mail->from . chr(10) .
+                  'FROM: ' . json_encode($mail->from) . chr(10) .
+                  ($mail->headers ? json_encode($mail->headers) . chr(10) : '') .
                   ($mail->returnPath ? 'RETURN-PATH: ' . $mail->returnPath . chr(10) : '') .
                   chr(10) .
                   $mail->text;
